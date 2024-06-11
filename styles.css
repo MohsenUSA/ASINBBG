@@ -1,0 +1,45 @@
+.container {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    text-align: center;
+}
+.mt-4 { margin-top: 16px; }
+.ml-2 { margin-left: 8px; }
+.input-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.border {
+    border: 4px solid gray;
+    border-radius: 8px;
+    background-color: white;
+    padding: 16px;
+    margin-top: 16px;
+    text-align: center;
+}
+.button-red, .button-teal {
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+    margin-top: 16px;
+}
+.button-red {
+    background-color: red;
+    color: white;
+}
+.button-teal {
+    background-color: teal;
+    color: white;
+}
+.canvas-center {
+    display: block;
+    margin: 0 auto;
+}
+textarea, select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 16px;
+    resize: none; /* Prevent resizing */
+}
