@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk Barcode Generator</title>
+    <style>
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .mt-4 { margin-top: 16px; }
+        .ml-2 { margin-left: 8px; }
+        .input-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .border {
+            border: 4px solid gray;
+            border-radius: 8px;
+            background-color: white;
+            padding: 16px;
+            margin-top: 16px;
+            text-align: center;
+        }
+        .button-red, .button-teal {
+            padding: 8px 16px;
+            border: none;
+            cursor: pointer;
+            margin-top: 16px;
+        }
+        .button-red {
+            background-color: red;
+            color: white;
+        }
+        .button-teal {
+            background-color: teal;
+            color: white;
+        }
+        .canvas-center {
+            display: block;
+            margin: 0 auto;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 16px;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.0/JsBarcode.all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <p>
+            This tool extracts ASINs from POs, Excel files, or your Emails and generates Barcodes or QR Codes.
+        </p>
+        <br />
+        <p>
+            Copy the whole PO or Excel file or Email content and paste it into the text box. It will extract the ASINs for you.
+        </p>
+        <div class="input-box">
+            <input id="inputField" type="text" placeholder="Paste your copied text here!" autocomplete="off" oninput="handleInputChange()">
+            <button class="button-red" onclick="handleClear()">Clear</button>
+        </div>
+        <select id="typeSelect" class="mt-4" onchange="handleTypeChange()">
+            <option value="barcode">Barcode</option>
+            <option value="qr">QR Code</option>
+        </select>
+        <button class="button-teal mt-4" onclick="handleGenerate()">Generate</button>
+        <div id="generatedCodes" class="mt-4"></div>
+    </div>
+
+    <script>
+        let inputValues = [];
+        let selectedType = 'barcode';
+        let generatedCodes = [];
+
+        function handleInputChange() {
+        const value = document.getElementById('inputField').value;
+        const matches = value.match(/\bB\w{9}\b/g);
+        if (matches) {
+            inputValues = [...new Set(matches)]; // Remove duplicates
+        } else {
+            inputValues = [];
+        }
+        if (value.trim() === '') {
+            generatedCodes = [];
+            renderGeneratedCodes();
+        }
+    }
+
+        function handleTypeChange() {
+            selectedType = document.getElementById('typeSelect').value;
+        }
+
+        function handleGenerate() {
+            if (inputValues.length > 0) {
+                generatedCodes = inputValues.map((value, index) => {
+                    return { value, type: selectedType, index: index + 1 };
+                });
+                renderGeneratedCodes();
+            } else {
+                generatedCodes = [];
+                renderGeneratedCodes();
+            }
+        }
+
+        function handleClear() {
+            inputValues = [];
+            generatedCodes = [];
+            document.getElementById('inputField').value = '';
+            renderGeneratedCodes();
+        }
+
+        function renderGeneratedCodes() {
+            const container = document.getElementById('generatedCodes');
+            container.innerHTML = '';
+            generatedCodes.forEach((code, index) => {
+                const div = document.createElement('div');
+                div.className = 'border';
+                div.innerHTML = `<p style="text-align: center; margin: 0;">${code.index}</p><br/><br/>`;
+                if (code.type === 'barcode') {
+                    const canvas = document.createElement('canvas');
+                    canvas.className = 'canvas-center';
+                    JsBarcode(canvas, code.value, { width: 2, height: 50, background: 'white' });
+                    div.appendChild(canvas);
+                } else if (code.type === 'qr') {
+                    const qr = document.createElement('canvas');
+                    qr.className = 'canvas-center';
+                    const qrCode = new QRious({ element: qr, value: code.value, size: 128 });
+                    div.appendChild(qr);
+                    const text = document.createElement('p');
+                    text.innerText = code.value;
+                    text.style.textAlign = 'center';
+                    text.style.color = 'black';
+                    div.appendChild(text);
+                }
+                container.appendChild(div);
+            });
+        }
+    </script>
+</body>
+</html>
