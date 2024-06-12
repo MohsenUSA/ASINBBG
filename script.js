@@ -4,7 +4,7 @@ let generatedCodes = [];
 
 function handleInputChange() {
     const value = document.getElementById('inputField').value;
-    const matches = value.match(/\bB\w{9}\b/g);
+    const matches = value.match(/\bB[A-Z0-9]{9}\b/g); // Only match uppercase B followed by 9 alphanumeric characters
     if (matches) {
         inputValues = [...new Set(matches)]; // Remove duplicates
         document.getElementById('inputField').value = inputValues.join(' '); // Display ASINs separated by spaces
@@ -38,6 +38,7 @@ function handleClear() {
     inputValues = [];
     generatedCodes = [];
     document.getElementById('inputField').value = '';
+    document.getElementById('inputField').focus(); // Set focus to the input field
     renderGeneratedCodes();
 }
 

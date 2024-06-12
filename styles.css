@@ -28,10 +28,12 @@
 .button-red {
     background-color: red;
     color: white;
+    width: 40%;
 }
 .button-teal {
     background-color: teal;
     color: white;
+    width: 40%;
 }
 .canvas-center {
     display: block;
