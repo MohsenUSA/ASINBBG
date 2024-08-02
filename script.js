@@ -76,3 +76,7 @@ document.getElementById('inputField').addEventListener('paste', function(event) 
     document.getElementById('inputField').value = paste;
     handleInputChange();
 });
+
+// Event listeners for input and change to handle other input methods
+document.getElementById('inputField').addEventListener('input', handleInputChange);
+document.getElementById('inputField').addEventListener('change', handleInputChange);
