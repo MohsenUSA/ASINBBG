@@ -71,10 +71,7 @@ function renderGeneratedCodes() {
 
 // Event listener for pasting
 document.getElementById('inputField').addEventListener('paste', function(event) {
-    event.preventDefault();
-    const paste = (event.clipboardData || window.clipboardData).getData('text');
-    document.getElementById('inputField').value = paste;
-    handleInputChange();
+    setTimeout(handleInputChange, 0); // Call handleInputChange after the paste event is completed
 });
 
 // Event listeners for input and change to handle other input methods
